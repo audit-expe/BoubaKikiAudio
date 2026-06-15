@@ -387,6 +387,18 @@ function addResponseTrial(stim) {
       presentation_order: stim.presentation_order
     }
   });
+
+  timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <div class="panel">
+      <h2>Practice trials</h2>
+      <p>You will first complete two practice trials.</p>
+    </div>
+  `,
+  choices: ["START"],
+  button_html: '<button class="jspsych-btn btn-std">%choice%</button>'
+});
 }
 
 familiarization_stimuli.forEach(addResponseTrial);
