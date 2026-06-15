@@ -239,9 +239,9 @@ timeline.push({
 timeline.push({
   type: jsPsychHtmlButtonResponse,
   stimulus: `
-    <div class="panel">
+    <div class="panel center">
       <h2>Audio Matching Task</h2>
-      <p>You will hear the sound of a person drawing a shape on a table. Imagine the shape, then decide whether it evokes the non-word 'Bouba' or 'Kiki' more.</p>
+      <p>You will hear the sound of a person drawing a shape on a table. Imagine the shape, then decide whether it evokes the non-word <strong>'Bouba'</strong> or <strong>'Kiki'</strong> more.</p>
       <p>You can either click directly on the corresponding button or press the left arrow (left button) or right arrow (right button).</p>
       <p>Please use headphones during the experiment.</p>
       <p>You can track your progress using the progress bar at the top of the screen.</p>
@@ -393,7 +393,7 @@ function addResponseTrial(stim) {
 timeline.push({
   type: jsPsychHtmlButtonResponse,
   stimulus: `
-    <div class="panel">
+    <div class="panel center">
       <h2>Practice trials</h2>
       <p>You will first complete two practice trials.</p>
     </div>
@@ -405,7 +405,7 @@ familiarization_stimuli.forEach(addResponseTrial);
 timeline.push({
   type: jsPsychHtmlButtonResponse,
   stimulus: `
-    <div class="panel">
+    <div class="panel center">
       <h2>The experiment will now begin</h2>
       <p>The practice trials are complete.</p>
       <p>You can now start the main experiment.</p>
