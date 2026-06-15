@@ -84,7 +84,28 @@ const main_stimuli = Array.from({ length: STIM_END - STIM_START + 1 }, (_, i) =>
     correct_response: ""
   }));
 
-const catch_stimuli = jsPsych.randomization.sampleWithoutReplacement(CATCH_DIGITS, N_CATCH_TRIALS)
+const catch_stimuli = [
+  {
+    trial_category: "catch_digit",
+    task_modality: "audio",
+    is_catch: true,
+    stim_id: "catch_2",
+    stim_number: 2,
+    stim_file: "catch_2.wav",
+    choices: ["2", "7"],
+    correct_response: "2"
+  },
+  {
+    trial_category: "catch_digit",
+    task_modality: "audio",
+    is_catch: true,
+    stim_id: "catch_7",
+    stim_number: 7,
+    stim_file: "catch_7.wav",
+    choices: ["7", "3"],
+    correct_response: "7"
+  }
+];
   .map(n => {
     const foil = jsPsych.randomization.sampleWithoutReplacement(
       CATCH_DIGITS.filter(x => x !== n), 1
@@ -275,30 +296,20 @@ function addResponseTrial(stim) {
     ? "Which digit is shown?"
     : "Which non-word does this sound evoke more?";
   const hint = `Left arrow = ${leftChoice} &nbsp;&nbsp;|&nbsp;&nbsp; Right arrow = ${rightChoice}`;
-  const stimulusHtml = stim.is_catch
-    ? `
-      <div class="stim-wrap">
-        <h2>Catch trial</h2>
-        <p>${instruction}</p>
-        <img class="stim-img" src="${escapeHtml(stim.stim_file)}" alt="catch digit">
-        <div class="key-hint">${hint}</div>
-      </div>`
-    : `
-      <div class="stim-wrap">
-        <h2>Listen</h2>
-        <p>The sound will play automatically.</p>
-        <div id="audio-status" class="status">Loading sound...</div>
-        <audio id="trial-audio" preload="auto" src="${escapeHtml(stim.stim_file)}"></audio>
-        <div class="key-hint">${hint}</div>
-      </div>`;
+  const stimulusHtml = `
+  <div class="stim-wrap">
+    <h2>Listen</h2>
+    <p>The sound will play automatically.</p>
+    <div id="audio-status" class="status">Loading sound...</div>
+    <audio id="trial-audio" preload="auto" src="${escapeHtml(stim.stim_file)}"></audio>
+    <div class="key-hint">${hint}</div>
+  </div>`;
 
   timeline.push({
     type: jsPsychHtmlButtonResponse,
     stimulus: stimulusHtml,
     choices: choices,
-    button_html: stim.is_catch
-      ? '<button class="jspsych-btn btn-std">%choice%</button>'
-      : '<button class="jspsych-btn btn-std" disabled>%choice%</button>',
+    button_html: '<button class="jspsych-btn btn-std" disabled>%choice%</button>',
     data: {
       trial_kind: "response",
       trial_category: stim.trial_category,
@@ -315,7 +326,7 @@ function addResponseTrial(stim) {
     on_load: () => {
       const start = performance.now();
       const buttons = document.querySelectorAll(".jspsych-btn");
-      let responseEnabled = stim.is_catch;
+      let responseEnabled = false;
       let audio = null;
       let status = null;
 
@@ -357,7 +368,7 @@ function addResponseTrial(stim) {
       buttons[0].addEventListener("click", e => { e.stopImmediatePropagation(); finish(leftChoice, "mouse"); }, true);
       buttons[1].addEventListener("click", e => { e.stopImmediatePropagation(); finish(rightChoice, "mouse"); }, true);
 
-      if (!stim.is_catch) {
+      
         audio = document.getElementById("trial-audio");
         status = document.getElementById("audio-status");
         audio.addEventListener("ended", enableResponse);
@@ -369,7 +380,7 @@ function addResponseTrial(stim) {
             audio.play();
           });
         });
-      }
+      
     }
   });
 
